@@ -57,16 +57,30 @@ public class UfficioServiceImpl implements UfficioService{
 
     @Override
     public List<UfficioDto> findAllByParametroAutocomplete(String parametroRicerca, Integer idForzaPolizia, List<String> codiciUfficioDaEscludere, String ufficioOperatore, String ruoloOperatore) {
-
+        List<Ufficio> uffici = null;
         if(codiciUfficioDaEscludere.isEmpty())
             codiciUfficioDaEscludere.add(" ");
 
-        List<Ufficio> uffici = ufficioRepository.autocompleteByForzaPolizia(
-                parametroRicerca,
-                idForzaPolizia,
-                codiciUfficioDaEscludere,
-                ufficioOperatore,
-                ruoloOperatore);
+        if("R_UFFICIO_SICUREZZA".equalsIgnoreCase(ruoloOperatore)) {
+            uffici = ufficioRepository.autocompleteByForzaPoliziaRuoloUfficioSicurezza(
+                    parametroRicerca,
+                    idForzaPolizia,
+                    codiciUfficioDaEscludere,
+                    ufficioOperatore);
+        }
+        else{
+            //restituire solo gli Uffici di competenza dell'utente in sessione.
+            uffici = ufficioRepository.autocompleteByForzaPolizia(
+                    parametroRicerca,
+                    idForzaPolizia,
+                    codiciUfficioDaEscludere,
+                    ufficioOperatore);
+
+        }
+
+
+
+
 
         return uffici.stream().map(el -> ufficioMapper.toDto(el, comandanteUfficioRepository)).toList();
     }
