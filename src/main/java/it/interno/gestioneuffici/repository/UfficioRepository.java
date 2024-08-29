@@ -61,7 +61,7 @@ public interface UfficioRepository extends JpaRepository<Ufficio, String>, JpaSp
             "AND sul.COD_UFF LIKE %?1% " +
             "AND sul.COD_UFF NOT IN ?3 " +
             "AND (?2 IS NULL OR (?2 != 1 AND FORZA_POLIZIA = ?2) OR (?2 = 1 AND FORZA_POLIZIA NOT IN (2, 3, 4))) " +
-            "AND sul.COD_UFF IN (SELECT * FROM JSON_TABLE(SSD_SECURITY.GET_UFF_GER(?4),'$[*]' COLUMNS VAL VARCHAR PATH '$')))" +
+            "AND sul.COD_UFF IN (SELECT * FROM JSON_TABLE(SSD_SECURITY.GET_UFF_GER(?4),'$[*]' COLUMNS VAL VARCHAR PATH '$'))" +
             "ORDER BY sul.COD_UFF ASC", nativeQuery = true)
     List<Ufficio> autocompleteByForzaPolizia(String parametroRicerca, Integer forzaPolizia, List<String> ufficiDaEscludere, String ufficioOperatore);
 
